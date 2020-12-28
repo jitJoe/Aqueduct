@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Aqueduct.Shared\Aqueduct.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+        <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_UnmanagedRegistrationCache Remove="obj\Aqueduct.Server.csproj.UnmanagedRegistration.cache" />
+      <_UnmanagedRegistrationCache Remove="obj\Aqueduct.Server.csproj.UnmanagedRegistration.cache" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ResolveComReferenceCache Remove="obj\Debug\net5.0\Aqueduct.Server.csproj.ResolveComReference.cache" />
+      <_ResolveComReferenceCache Remove="obj\Debug\net5.0\Aqueduct.Server.csproj.ResolveComReference.cache" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <IntermediateAssembly Remove="obj\Debug\net5.0\Aqueduct.Server.dll" />
+      <IntermediateAssembly Remove="obj\Debug\net5.0\Aqueduct.Server.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <IntermediateRefAssembly Remove="obj\Debug\net5.0\ref\Aqueduct.Server.dll" />
+      <IntermediateRefAssembly Remove="obj\Debug\net5.0\ref\Aqueduct.Server.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DebugSymbolsIntermediatePath Remove="obj\Debug\net5.0\Aqueduct.Server.pdb" />
+      <_DebugSymbolsIntermediatePath Remove="obj\Debug\net5.0\Aqueduct.Server.pdb" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DeploymentManifestEntryPoint Remove="obj\Debug\net5.0\Aqueduct.Server.dll" />
+      <_DeploymentManifestEntryPoint Remove="obj\Debug\net5.0\Aqueduct.Server.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ApplicationManifest Remove="obj\Debug\net5.0\Native.Aqueduct.Server.manifest" />
+      <ApplicationManifest Remove="obj\Debug\net5.0\Native.Aqueduct.Server.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <DeployManifest Remove="obj\Debug\net5.0\Aqueduct.Server.application" />
+      <DeployManifest Remove="obj\Debug\net5.0\Aqueduct.Server.application" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ClsidMap Remove="obj\Debug\net5.0\Aqueduct.Server.clsidmap" />
+      <ClsidMap Remove="obj\Debug\net5.0\Aqueduct.Server.clsidmap" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <RegFreeComManifest Remove="obj\Debug\net5.0\Aqueduct.Server.X.manifest" />
+      <RegFreeComManifest Remove="obj\Debug\net5.0\Aqueduct.Server.X.manifest" />
+    </ItemGroup>
+    
+</Project>

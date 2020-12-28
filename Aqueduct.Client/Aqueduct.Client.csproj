@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Aqueduct.Shared\Aqueduct.Shared.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <_UnmanagedRegistrationCache Remove="obj\Aqueduct.Client.csproj.UnmanagedRegistration.cache" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <_ResolveComReferenceCache Remove="obj\Debug\net5.0\Aqueduct.Client.csproj.ResolveComReference.cache" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <IntermediateAssembly Remove="obj\Debug\net5.0\Aqueduct.Client.dll" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <IntermediateRefAssembly Remove="obj\Debug\net5.0\ref\Aqueduct.Client.dll" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <_DebugSymbolsIntermediatePath Remove="obj\Debug\net5.0\Aqueduct.Client.pdb" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <_DeploymentManifestEntryPoint Remove="obj\Debug\net5.0\Aqueduct.Client.dll" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ApplicationManifest Remove="obj\Debug\net5.0\Native.Aqueduct.Client.manifest" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <DeployManifest Remove="obj\Debug\net5.0\Aqueduct.Client.application" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ClsidMap Remove="obj\Debug\net5.0\Aqueduct.Client.clsidmap" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <RegFreeComManifest Remove="obj\Debug\net5.0\Aqueduct.Client.X.manifest" />
+    </ItemGroup>
+
+</Project>
