@@ -8,8 +8,8 @@ Aqueduct is a code-first bi-directional RPC system for Blazor WASM and ASP.Net C
 
 ## Example Flow (Client->Server)
  - Define an interface in a shared assembly
-   - Every method must return a Task or Task&lt;,T>
-   - For methods returning Task&lt;,T>, T must be a type that is available to both the Client and Server assemblies (and present in an allow-list)
+   - Every method must return a `Task` or `Task<T>`
+   - For methods returning `Task<T>`, `T` must be a type that is available to both the Client and Server assemblies (and present in an allow-list)
    - All method parameters must be types that are available to both the Client and Server assemblies (and present in an allow-list)
  - Implement the interface in your ASP.Net server project
    - Any exceptions that are thrown must be of a type that is available to both the Client and Server assemblies, if it is not then it will be substituted for the base Exception type
@@ -57,7 +57,7 @@ The `Aqueduct.Client.ServiceProvider.IClientServiceProvider` and `Aqueduct.Serve
 ### Allowed Type Lists
 There are two types of allowed type list: `Serialisation` and `Services`.  These lists are intended to prevent a malicious actor from tricking the Server into instantiating types that it shouldn't and to prevent either side from sending an assignment compatible serialisation of a class the other has no knowledge of.
 
-The types in a serialisation list are allowed to be used as Client Service/Server Service interface method return types (the generic parameter T in `Task&lt;,T>` specifically), as parameters on those methods and as assignment compatible instances for their members (e.g. sending a `Dog` for a member typed as `Animal`).
+The types in a serialisation list are allowed to be used as Client Service/Server Service interface method return types (the generic parameter T in `Task<T>` specifically), as parameters on those methods and as assignment compatible instances for their members (e.g. sending a `Dog` for a member typed as `Animal`).
 
 The types in a services list are allowed to be used as Client Service/Server Service interfaces and implementations.
 
