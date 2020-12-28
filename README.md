@@ -19,8 +19,13 @@ Aqueduct is a code-first bi-directional RPC system for Blazor WASM and ASP.Net C
  - Receive the result or exception as if it were a local call
    - If no response is received within a timeout window (30s by default), the Task will be cancelled (however, this does not cancel execution on the Server side if it has started)
  
+## NuGet
+ - https://www.nuget.org/packages/Aqueduct.Client
+ - https://www.nuget.org/packages/Aqueduct.Server
+ - https://www.nuget.org/packages/Aqueduct.Shared
+
 ## Example Project
- - TODO: Link to an example project
+ - https://github.com/jitJoe/AqueductExample
 
 ## Concepts
 
