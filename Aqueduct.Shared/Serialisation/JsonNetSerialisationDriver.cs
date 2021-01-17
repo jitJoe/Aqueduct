@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,6 +10,9 @@ namespace Aqueduct.Shared.Serialisation
 {
     public class JsonNetSerialisationDriver : ISerialisationDriver
     {
+        private readonly List<Type> _primitiveJsonTypes = new() 
+            { typeof(string), typeof(bool), typeof(int), typeof(decimal), typeof(double), typeof(float) };
+        
         private readonly ITypeFinder _typeFinder;
         private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
         {
@@ -70,8 +74,22 @@ namespace Aqueduct.Shared.Serialisation
 
         public object Deserialise(byte[] serialised, Type baseType)
         {
-            var deserialised = Deserialise(serialised);
+            object deserialised;
+            if (_primitiveJsonTypes.Contains(baseType))
+            {
+                var serialisedString = Encoding.UTF8.GetString(serialised);
+                deserialised = JsonConvert.DeserializeObject(serialisedString, baseType);
+            }
+            else
+            {
+                deserialised = Deserialise(serialised);
+            }
 
+            if (deserialised == null)
+            {
+                return null;
+            }
+            
             if (deserialised.GetType() != baseType && !deserialised.GetType().IsSubclassOf(baseType))
             {
                 throw new Exception($"Serialised type was {deserialised.GetType()} but needed {baseType} or derived type");
