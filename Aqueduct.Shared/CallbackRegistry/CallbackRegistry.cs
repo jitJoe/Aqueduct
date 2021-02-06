@@ -28,7 +28,7 @@ namespace Aqueduct.Shared.CallbackRegistry
                 ReturnType = null,
                 CompletionSource = completionSource,
                 ExpiresAt = _dateTimeProvider.Now() + TimeSpan.FromMilliseconds(_aqueductSharedConfiguration.CallbackTimeoutMillis),
-                Expire = () => completionSource.SetCanceled()
+                Expire = () => completionSource.SetException(new CallbackExpiredException($"Callback for invocation {invocationId} has expired"))
             };
 
             if (! _callbacks.TryAdd(invocationId, callback))
@@ -49,7 +49,7 @@ namespace Aqueduct.Shared.CallbackRegistry
                 ReturnType = typeof(T),
                 CompletionSource = completionSource,
                 ExpiresAt = _dateTimeProvider.Now() + TimeSpan.FromMilliseconds(_aqueductSharedConfiguration.CallbackTimeoutMillis),
-                Expire = () => completionSource.SetCanceled()
+                Expire = () => completionSource.SetException(new CallbackExpiredException($"Callback for invocation {invocationId} has expired"))
             };
 
             if (!_callbacks.TryAdd(invocationId, callback))
@@ -69,7 +69,7 @@ namespace Aqueduct.Shared.CallbackRegistry
 
             var completionSource = callback.CompletionSource as TaskCompletionSource<T>;
 
-            if (completionSource == null || completionSource.Task.IsCanceled || completionSource.Task.IsCanceled ||
+            if (completionSource == null || completionSource.Task.IsFaulted || completionSource.Task.IsCanceled ||
                 completionSource.Task.IsCompleted)
             {
                 throw new Exception("Attempted to perform valued callback but completion source Task has already been used");
@@ -93,8 +93,8 @@ namespace Aqueduct.Shared.CallbackRegistry
             }
 
             var completionSource = callback.CompletionSource as TaskCompletionSource<T>;
-
-            if (completionSource == null || completionSource.Task.IsCanceled || completionSource.Task.IsCanceled ||
+            
+            if (completionSource == null || completionSource.Task.IsFaulted || completionSource.Task.IsCanceled ||
                 completionSource.Task.IsCompleted)
             {
                 throw new Exception("Attempted to throw for valued callback but completion source Task has already been used");

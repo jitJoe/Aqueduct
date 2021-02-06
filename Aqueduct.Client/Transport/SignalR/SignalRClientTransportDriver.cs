@@ -33,6 +33,9 @@ namespace Aqueduct.Client.Transport.SignalR
 
         private readonly MethodInfo _callbackRegistryRegisterValuedCallbackMethod =
             typeof(ICallbackRegistry).GetMethod("RegisterValuedCallback");
+
+        private readonly MethodInfo _callbackRegistryThrowForValuedCallbackMethod =
+            typeof(ICallbackRegistry).GetMethod("ThrowForValuedCallback");
         
         public SignalRClientTransportDriver(NavigationManager navigationManager, ISerialisationDriver serialisationDriver,
             ICallbackRegistry callbackRegistry, ITypeFinder typeFinder, IServiceProvider serviceProvider, ILogger<SignalRClientTransportDriver> logger)
@@ -172,7 +175,16 @@ namespace Aqueduct.Client.Transport.SignalR
 
                 var deserialisedException = _serialisationDriver.Deserialise(exceptionValue);
 
-                _callbackRegistry.ThrowForCallback(invocationId, (Exception) deserialisedException);
+                if (callbackReturnType == null)
+                {
+                    _callbackRegistry.ThrowForCallback(invocationId, (Exception) deserialisedException);
+                }
+                else
+                {
+                    _callbackRegistryThrowForValuedCallbackMethod
+                        .MakeGenericMethod(callbackReturnType)
+                        .Invoke(_callbackRegistry, new object[] { invocationId, deserialisedException, null });
+                }
             }
             catch (Exception exception)
             {

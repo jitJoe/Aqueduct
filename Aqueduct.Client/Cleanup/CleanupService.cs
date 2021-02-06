@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System;
+using System.Timers;
 using Aqueduct.Shared.CallbackRegistry;
 
 namespace Aqueduct.Client.Cleanup
@@ -12,7 +13,11 @@ namespace Aqueduct.Client.Cleanup
         {
             _callbackRegistry = callbackRegistry;
             _cleanupTimer = new Timer(500);
-            _cleanupTimer.Elapsed += (_, _) => _callbackRegistry.ClearExpiredCallbacks();
+            _cleanupTimer.Elapsed += (_, _) =>
+            {
+                _callbackRegistry.ClearExpiredCallbacks();
+            };
+            _cleanupTimer.Start();
         }
     }
 }
