@@ -173,11 +173,11 @@ namespace Aqueduct.Client.Transport.SignalR
                     return;
                 }
 
-                var deserialisedException = _serialisationDriver.Deserialise(exceptionValue);
+                var deserialisedException = _serialisationDriver.DeserialiseException(exceptionValue);
 
                 if (callbackReturnType == null)
                 {
-                    _callbackRegistry.ThrowForCallback(invocationId, (Exception) deserialisedException);
+                    _callbackRegistry.ThrowForCallback(invocationId, deserialisedException);
                 }
                 else
                 {

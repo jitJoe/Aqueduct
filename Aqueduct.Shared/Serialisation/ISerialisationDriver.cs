@@ -7,6 +7,7 @@ namespace Aqueduct.Shared.Serialisation
         byte[] Serialise(object subject);
         byte[] SerialiseException(Exception exception);
         object Deserialise(byte[] serialised);
+        Exception DeserialiseException(byte[] serialised);
         object Deserialise(byte[] serialised, Type baseType);
     }
 }

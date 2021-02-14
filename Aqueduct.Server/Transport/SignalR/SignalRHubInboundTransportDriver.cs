@@ -149,9 +149,9 @@ namespace Aqueduct.Server.Transport.SignalR
                     return;
                 }
 
-                var deserialisedException = _serialisationDriver.Deserialise(exceptionValue);
+                var deserialisedException = _serialisationDriver.DeserialiseException(exceptionValue);
 
-                _callbackRegistry.ThrowForCallback(invocationId, (Exception) deserialisedException);
+                _callbackRegistry.ThrowForCallback(invocationId, deserialisedException);
             }
             catch (Exception exception)
             {

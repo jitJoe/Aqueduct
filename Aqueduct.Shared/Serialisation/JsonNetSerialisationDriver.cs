@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Aqueduct.Shared.Proxy;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Aqueduct.Shared.Serialisation
 {
@@ -70,6 +71,32 @@ namespace Aqueduct.Shared.Serialisation
             CheckForUnknownTypes(serialisedString);
 
             return JsonConvert.DeserializeObject(serialisedString, _serializerSettings);
+        }
+        
+        public Exception DeserialiseException(byte[] serialised)
+        {
+            var serialisedString = Encoding.UTF8.GetString(serialised);
+            
+            CheckForUnknownTypes(serialisedString);
+
+            var exceptionTree = JObject.Parse(serialisedString);
+            var exception = JsonConvert.DeserializeObject(serialisedString, _serializerSettings);
+
+            if (exception is not Exception)
+            {
+                throw new Exception("Could not deserialise Exception, serialised object was not an Exception");
+            }
+
+            var stackTrace = exceptionTree["StackTrace"]?.Value<string>();
+            if (stackTrace != null)
+            {
+                var fieldInfo = typeof(Exception).GetField("_remoteStackTraceString", 
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.SetField);
+
+                fieldInfo?.SetValue(exception, stackTrace);
+            }
+            
+            return exception as Exception;
         }
 
         public object Deserialise(byte[] serialised, Type baseType)
