@@ -35,7 +35,10 @@ namespace Aqueduct.Shared.Proxy
         public void RegisterType(string purpose, Type type)
         {
             var purposeTypes = GetPurposeDictionary(purpose);
-            purposeTypes.Add(type.AssemblyQualifiedName, type);
+            if (!purposeTypes.ContainsKey(type.AssemblyQualifiedName))
+            {
+                purposeTypes.Add(type.AssemblyQualifiedName, type);
+            }
         }
 
         public void RegisterTypes(string purpose, IReadOnlyCollection<Type> types)
