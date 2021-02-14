@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Aqueduct.Shared.Proxy;
 
 namespace Aqueduct.Client.Transport
@@ -8,5 +9,6 @@ namespace Aqueduct.Client.Transport
         ProxyInvocationHandler<ClientToServerInvocationMetaData> InvocationHandler { get; }
 
         Task StartAsync();
+        void OnDisconnected(Func<Task> handler);
     }
 }

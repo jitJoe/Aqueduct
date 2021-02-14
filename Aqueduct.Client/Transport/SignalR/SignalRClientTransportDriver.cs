@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Timers;
 using Aqueduct.Client.ServiceProvider;
 using Aqueduct.Shared.CallbackRegistry;
 using Aqueduct.Shared.Extensions;
@@ -27,6 +28,8 @@ namespace Aqueduct.Client.Transport.SignalR
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<SignalRClientTransportDriver> _logger;
         private HubConnection _hubConnection;
+        private Func<Task> _onDisconnected;
+        private Timer _connectionCheckTimer;
 
         private readonly MethodInfo _callbackRegistryPerformValuedCallbackMethod = 
             typeof(ICallbackRegistry).GetMethod("PerformValuedCallback");
@@ -74,6 +77,16 @@ namespace Aqueduct.Client.Transport.SignalR
             try
             {
                 await _hubConnection.StartAsync();
+                _connectionCheckTimer = new Timer(500);
+                _connectionCheckTimer.Elapsed += (_, _) =>
+                {
+                    if (_hubConnection == null || _hubConnection.State == HubConnectionState.Disconnected)
+                    {
+                        _connectionCheckTimer.Stop();
+                        _onDisconnected?.Invoke();
+                    }
+                };
+                _connectionCheckTimer.Start();
             }
             catch (Exception exception)
             {
@@ -82,7 +95,12 @@ namespace Aqueduct.Client.Transport.SignalR
 
             _logger.LogInformation("Started SignalRClientTransportDriver...");
         }
-        
+
+        public void OnDisconnected(Func<Task> handler)
+        {
+            _onDisconnected = handler;
+        }
+
         //Handles inbound invocations
         private async Task ReceiveInvocationAsync(Guid invocationId, string service, string methodName, List<string> methodParameterTypes, List<byte[]> methodArguments)
         {
