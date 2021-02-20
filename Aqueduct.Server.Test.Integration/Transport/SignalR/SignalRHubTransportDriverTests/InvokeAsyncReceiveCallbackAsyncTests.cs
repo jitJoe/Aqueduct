@@ -98,7 +98,7 @@ namespace Aqueduct.Server.Test.Integration.Transport.SignalR.SignalRHubTransport
             TestBridge.SerialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Serialise("argument"))
                 .Returns(new byte[] { 1 });
 
-            TestBridge.SerialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Deserialise(new byte[] {2}))
+            TestBridge.SerialisationDriverMock.Setup(serialisationDriver => serialisationDriver.DeserialiseException(new byte[] {2}))
                 .Returns(new AnException());
 
             var taskCompletionSource = new TaskCompletionSource();
@@ -208,7 +208,7 @@ namespace Aqueduct.Server.Test.Integration.Transport.SignalR.SignalRHubTransport
                     await _hubConnection.SendCoreAsync("ReceiveCallbackAsync", new object[] { arguments[0], null, new byte[] { 2 } });
                 }, null);
             
-            TestBridge.SerialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Deserialise(new byte[] {2}))
+            TestBridge.SerialisationDriverMock.Setup(serialisationDriver => serialisationDriver.DeserialiseException(new byte[] {2}))
                 .Returns(new AnException());
             
             await Assert.ThrowsAsync<AnException>(async () => await (Task<string>) TestBridge.ServerTransportDriver.InvocationHandler

@@ -24,7 +24,7 @@ namespace Aqueduct.Shared.Test.Unit.CallbackRegistry.CallbackRegistryTests
 
             _callbackRegistry.ClearExpiredCallbacks();
             
-            Assert.Equal(TaskStatus.Canceled, callbackTaskOne.Status);
+            Assert.Equal(TaskStatus.Faulted, callbackTaskOne.Status);
             Assert.Equal(TaskStatus.WaitingForActivation, callbackTaskTwo.Status);
         }
     }

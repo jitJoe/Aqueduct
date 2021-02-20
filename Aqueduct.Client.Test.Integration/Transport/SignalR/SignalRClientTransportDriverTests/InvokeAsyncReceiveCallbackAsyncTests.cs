@@ -61,7 +61,7 @@ namespace Aqueduct.Client.Test.Integration.Transport.SignalR.SignalRClientTransp
             _serialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Serialise("argument"))
                 .Returns(new byte[] { 1 });
 
-            _serialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Deserialise(new byte[] {2}))
+            _serialisationDriverMock.Setup(serialisationDriver => serialisationDriver.DeserialiseException(new byte[] {2}))
                 .Returns(new AnException());
 
             var taskCompletionSource = new TaskCompletionSource();
@@ -142,7 +142,7 @@ namespace Aqueduct.Client.Test.Integration.Transport.SignalR.SignalRClientTransp
                 .Returns(typeof(string));
 
             _callbackRegistryMock.Setup(callbackRegistry =>
-                    callbackRegistry.ThrowForCallback(It.IsAny<Guid>(), It.IsAny<Exception>(), null))
+                    callbackRegistry.ThrowForValuedCallback<string>(It.IsAny<Guid>(), It.IsAny<Exception>(), null))
                 .Callback((Guid invocationId, Exception exception, Guid? connectionId) => taskCompletionSource.SetException(exception));
 
             StartServer();
@@ -154,7 +154,7 @@ namespace Aqueduct.Client.Test.Integration.Transport.SignalR.SignalRClientTransp
                     await _testHubAccessor.HubContext.Clients.All.SendCoreAsync("ReceiveCallbackAsync", new object[] { invocationId, null, new byte[] { 2 } });
                 };
 
-            _serialisationDriverMock.Setup(serialisationDriver => serialisationDriver.Deserialise(new byte[] {2}))
+            _serialisationDriverMock.Setup(serialisationDriver => serialisationDriver.DeserialiseException(new byte[] {2}))
                 .Returns(new AnException());
             
             await Assert.ThrowsAsync<AnException>(async () => await (Task<string>) _signalRClientTransportDriver.InvocationHandler
