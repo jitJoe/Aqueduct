@@ -14,6 +14,8 @@ namespace Aqueduct.Shared.Proxy
         void RegisterTypes(string purpose, IReadOnlyCollection<Type> types);
 
         Type GetTypeByName(string purpose, string name);
+        UsableType GetUsableTypeByName(string purpose, string name);
+        UsableType GetUsableTypeByTypeDescription(string purpose, TypeDescription typeDescription);
         Type GetTypeByInterfaceImplementations(string purpose, List<Type> interfaceTypes);
     }
 }

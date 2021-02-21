@@ -15,12 +15,14 @@ namespace Aqueduct.Shared.Serialisation
             { typeof(string), typeof(bool), typeof(int), typeof(decimal), typeof(double), typeof(float) };
         
         private readonly ITypeFinder _typeFinder;
-        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _serializerSettings = new()
         {
             TypeNameHandling = TypeNameHandling.All,
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
         };
 
+        private readonly TypeNameParser _typeNameParser = new();
+        
         public JsonNetSerialisationDriver(ITypeFinder typeFinder)
         {
             _typeFinder = typeFinder;
@@ -41,7 +43,25 @@ namespace Aqueduct.Shared.Serialisation
 
             foreach (Match match in matches)
             {
-                _typeFinder.GetTypeByName("Serialisable", match.Groups[1].Value);
+                CheckForUnknownTypes(_typeNameParser.Parse(match.Groups[1].Value));
+            }
+        }
+
+        private void CheckForUnknownTypes(TypeDescription typeDescription)
+        {
+            if (!typeDescription.AllGenericArgumentsSupplied)
+            {
+                throw new Exception("Cannot deserialise type with open type arguments");
+            }
+            
+            var usableType = _typeFinder.GetUsableTypeByTypeDescription("Serialisable", typeDescription);
+
+            if (!usableType.TypeDescription.AllGenericArgumentsSupplied)
+            {
+                for (var i = usableType.TypeDescription.GenericTypes.Count; i < typeDescription.GenericTypes.Count; i++)
+                {
+                    CheckForUnknownTypes(typeDescription.GenericTypes[i]);
+                }
             }
         }
 

@@ -37,7 +37,7 @@ public sealed class PublishLocal : FrostingTask<Context>
         var dotnetCoreMsBuildSettings = new DotNetCoreMSBuildSettings();
 
         context.DotNetCorePack(csProj, new DotNetCorePackSettings {
-            Configuration = "Release",
+            Configuration = "Debug",
             OutputDirectory = localNuGetRepository,
             MSBuildSettings = dotnetCoreMsBuildSettings
         });

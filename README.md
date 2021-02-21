@@ -63,7 +63,15 @@ The types in a services list are allowed to be used as Client Service/Server Ser
 
 These lists are provided to the Client and Server independently via their Startup/Program extension methods (`Aqueduct.Server.Extensions.AddAqueductExtensions::AddAqueduct` and `Aqueduct.Client.Extensions.AddAqueductExtensions::AddAqueduct`).  As the Serialisation lists should match, it makes sense to define one list in a shared assembly and use this on both sides.
 
-These lists support adding an entire assembly, the simplest approach is to add everything in a shared assembly (along with specifically adding other types you use (string for example)) for both then not to worry about it again.  However, you should exercise caution if taking this approach (see below.)
+These lists support adding an entire assembly, the simplest approach is to add everything in a shared assembly (along with specifically adding other types you use (string, Exception for example)) for both then not to worry about it again.  However, you should exercise caution if taking this approach (see below.)
+
+For generic types, you can add a fully constructed type (e.g. `List<string>`), in which case only that specific type will be allowed.  Alternatively, you can add an open type (e.g. `List<>` or `Dictionary<,>`) in which case, at runtime, the type parameters can be any other allowed type (e.g. if you have added `string` and `decimal` then `Dictionary<string, decimal>` would be permitted at runtime).
+
+There are some peculiarities with serialising Exceptions, namely that it uses an internal type `System.Collections.ListDictionaryInternal`, you can add this (and other non-public classes) to the allowed list like such:
+
+```
+typeof(List<>).Assembly.GetType("System.Collections.ListDictionaryInternal")
+```
 
 It is important that you understand the security implications of adding types to these lists:
  - You should be happy with an instance of any type that is included in the Serialisation list being instantiated at will by a third party.
