@@ -80,7 +80,7 @@ namespace Aqueduct.Shared.Serialisation
             }
             catch (Exception _)
             {
-                return Serialise(new Exception("Original Exception not serialisable, replaced.  " + exception.Message));
+                return Serialise(new Exception($"Original Exception ({exception.GetType().AssemblyQualifiedName}) not serialisable, replaced.  Message: {exception.Message}"));
             }
         }
 
