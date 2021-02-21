@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Aqueduct.Client.Transport;
 using Aqueduct.Shared.Proxy;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Aqueduct.Client.ServiceProvider
 {
@@ -83,14 +84,15 @@ namespace Aqueduct.Client.ServiceProvider
                 throw new Exception($"Cannot create service for {string.Join(",", interfaces)}/{implementationType} as implementation does not derive from ClientService");
             }
 
+            var scope = _serviceProvider.CreateScope();
             var constructor = implementationType.GetConstructors().FirstOrDefault();
             var constructorArguments = constructor == null
                 ? new List<object>()
-                : constructor.GetParameters().Select(p => _serviceProvider.GetService(p.ParameterType));
+                : constructor.GetParameters().Select(p => scope.ServiceProvider.GetService(p.ParameterType));
 
             var implementation = (ClientService) Activator.CreateInstance(implementationType, constructorArguments.ToArray());
             
-            implementation.ClientServiceProvider = this;
+            implementation.ClientServiceProvider = this; 
 
             _clientServices.Add(implementationType, implementation);
             
