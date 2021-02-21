@@ -101,9 +101,14 @@ namespace Aqueduct.Shared.Proxy
                 ilGenerator.Emit(OpCodes.Dup);
                 ilGenerator.Emit(OpCodes.Ldc_I4, i);
                 ilGenerator.Emit(OpCodes.Ldarg, i + 1);
+                if (parameters[i].ParameterType.IsValueType)
+                {
+                    ilGenerator.Emit(OpCodes.Box, parameters[i].ParameterType);
+                }
+
                 ilGenerator.Emit(OpCodes.Stelem_Ref);
             }
-            
+
             //Load metadata (from field _metadata) onto eval stack
             ilGenerator.Emit(OpCodes.Ldarg_0);                                //_target, target MethodInfo, object[], this
             ilGenerator.Emit(OpCodes.Ldfld, _fields["_metadata"]);            //_target, target MethodInfo, object[], _metadata
