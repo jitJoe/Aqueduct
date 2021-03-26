@@ -12,7 +12,7 @@ namespace Aqueduct.Shared.Serialisation
     public class JsonNetSerialisationDriver : ISerialisationDriver
     {
         private readonly List<Type> _primitiveJsonTypes = new() 
-            { typeof(string), typeof(bool), typeof(int), typeof(decimal), typeof(double), typeof(float) };
+            { typeof(string), typeof(bool), typeof(int), typeof(decimal), typeof(double), typeof(float), typeof(System.DateTime), typeof(DateTimeOffset) };
         
         private readonly ITypeFinder _typeFinder;
         private readonly JsonSerializerSettings _serializerSettings = new()
