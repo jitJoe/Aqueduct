@@ -2,9 +2,13 @@
 
 Aqueduct is a code-first bi-directional RPC system for Blazor WASM and ASP.Net Core that sits atop SignalR.
 
-## Aims
- - Expedite development speed by reducing message handling/sending boilerplate and instead dealing entirely in C# concepts (return values and exceptions rather than messages)
- - Reduce mistakes and cost-of-change by using a shared strongly-typed interface as a contract between client and server rather than implicit contracts - catch mistakes caused by a contract change at compile time rather than runtime
+Aqueduct allows you to define the interface between client and server entirely in C# interfaces.  By providing a proxy mechanism to invoke methods on a real implementation on the other side of the connection much of the boilerplate 
+traditionally associated with making calls (be that HTTP or SignalR) is removed and replaced entirely by C# constructs (e.g. Exceptions rather than status codes.)  Whilst this is obviously unsuitable for architectures where the client side 
+technology may differ, for full-C# stacks (e.g. internal projects with no requirement for a public facing API) the hope is to provide a much faster development experience with the added bonus of static type safety between the client-server interface.
+
+This project is still very much an experiment, so not recommended for production use.
+
+![Services Overview](./readme/diagrams/services-overview/services-overview.png)
 
 ## Example Flow (Client->Server)
  - Define an interface in a shared assembly
@@ -23,6 +27,12 @@ Aqueduct is a code-first bi-directional RPC system for Blazor WASM and ASP.Net C
  - https://www.nuget.org/packages/Aqueduct.Client
  - https://www.nuget.org/packages/Aqueduct.Server
  - https://www.nuget.org/packages/Aqueduct.Shared
+
+## How is this different than Blazor WASM + AspNet Core + SignalR Core
+Aqueduct uses SignalR as its communication layer but builds on it in several ways:
+ - Aqueduct supports Server->Client invocations with a return value whereas SignalR does not
+ - Aqueduct adds the concept of client scoped services whereas SignalR stops at sending messages to a client (e.g. Aqueduct is `fetch me an instance of IMyClientService for connection A and then invoke DisplayMessage on it` versus SignalR `Invoke DisplayMessage on connection A`)
+ - Aqueduct supports polymorphic (de)serialisation of arguments, return types and Exceptions
 
 ## Example Project
  - https://github.com/jitJoe/AqueductExample
